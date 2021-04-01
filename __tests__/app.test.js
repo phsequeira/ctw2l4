@@ -1,23 +1,18 @@
 require('dotenv').config();
-
-const fakeRequest = require('supertest');
-const app = require('../lib/app');
+const  request  = require('superagent');
 
 describe('app routes', () => {
   test('returns the current weather in salem or', async() => {
     const expectation =
       {
         'forecast': 'Clear sky',
-        'tempature': 53.8,
+        'tempature': 59.2,
         'time': 'Thu Apr 01 2021',
       };
     
-    const data = await fakeRequest(app)
-      .get('/weather/now?city=salem&state=or')
-      .expect('Content-Type', /json/)
-      .expect(200);
+    const weather = await request.get('https://immense-citadel-01293.herokuapp.com/weather/now?city=salem&state=or');
 
-    expect(data.body[0]).toEqual(expectation);
+    expect(weather.body[0]).toEqual(expectation);
   });
   test('returns the weather in salem or for the next 7 days', async() => {
 
@@ -59,11 +54,8 @@ describe('app routes', () => {
       }
     ];
     
-    const data = await fakeRequest(app)
-      .get('/weather/7Days?city=salem&state=or')
-      .expect('Content-Type', /json/)
-      .expect(200);
+    const weather = await request.get('https://immense-citadel-01293.herokuapp.com/weather/7Days?city=salem&state=or');
 
-    expect(data.body).toEqual(expectation);
+    expect(weather.body).toEqual(expectation);
   });
 });
