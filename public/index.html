@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/public/css/index.css">
+    <title>WeatherPage</title>
+</head>
+
+<body>
+    <div>
+        <h2>Welcome to my Weather Page!!!</h2>
+        <br><br>
+        <h3>Please enter the City and State of the place you want to know the weather</h3>
+    </div>
+    <div> 
+        City
+        <input id="city" class="city">
+        <br>
+        <br>
+        State
+        <input id="state" class="state">
+        <br><br>
+        <button id="nowButton" class="now-results">Current Weather</button>
+        <button id="sevenButton" class="seven-results">7 Day Weather</button>
+        <br><br>
+        <button id="reset">Reset</button>
+    </div>
+    <div id="nowDiv">
+        <h2>Current Weather</h2>
+    </div>
+    <div id="sevenDiv">
+        <h2>Seven Day Weather</h2>
+    </div>
+
+    <script type="module" src="/public/js/index.js"></script>
+</body>
+</html>
