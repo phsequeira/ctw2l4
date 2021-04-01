@@ -1,65 +1,76 @@
 require('dotenv').config();
 
-const { execSync } = require('child_process');
+
 
 const fakeRequest = require('supertest');
 const app = require('../lib/app');
-const client = require('../lib/client');
+
 
 describe('app routes', () => {
-  describe('routes', () => {
-    let token;
   
-    beforeAll(async done => {
-      execSync('npm run setup-db');
-  
-      client.connect();
-  
-      const signInData = await fakeRequest(app)
-        .post('/auth/signup')
-        .send({
-          email: 'jon@user.com',
-          password: '1234'
-        });
-      
-      token = signInData.body.token; // eslint-disable-line
-  
-      return done();
-    });
-  
-    afterAll(done => {
-      return client.end(done);
-    });
 
-    test('returns animals', async() => {
+  test('returns the current weather in salem or', async() => {
 
-      const expectation = [
-        {
-          'id': 1,
-          'name': 'bessie',
-          'coolfactor': 3,
-          'owner_id': 1
-        },
-        {
-          'id': 2,
-          'name': 'jumpy',
-          'coolfactor': 4,
-          'owner_id': 1
-        },
-        {
-          'id': 3,
-          'name': 'spot',
-          'coolfactor': 10,
-          'owner_id': 1
-        }
-      ];
+    const expectation =
+      {
+        'forecast': 'Clear sky',
+        'tempature': 66.4,
+        'time': 'Wed Mar 31 2021'
+      };
+    
+    const data = await fakeRequest(app)
+      .get('/weather/now?city=salem&state=or')
+      .expect('Content-Type', /json/)
+      .expect(200);
 
-      const data = await fakeRequest(app)
-        .get('/animals')
-        .expect('Content-Type', /json/)
-        .expect(200);
+    expect(data.body[0]).toEqual(expectation);
+  });
 
-      expect(data.body).toEqual(expectation);
-    });
+  test('returns the weather in salem or for the next 16 days', async() => {
+
+    const expectation = [
+      {
+        'forecast': 'Few clouds',
+        'tempature': 11.1,
+        'time': 'Wed Mar 31 2021'
+      },
+      {
+        'forecast': 'Broken clouds',
+        'tempature': 10.5,
+        'time': 'Thu Apr 01 2021'
+      },
+      {
+        'forecast': 'Broken clouds',
+        'tempature': 9,
+        'time': 'Fri Apr 02 2021'
+      },
+      {
+        'forecast': 'Overcast clouds',
+        'tempature': 9.2,
+        'time': 'Sat Apr 03 2021'
+      },
+      {
+        'forecast': 'Light shower rain',
+        'tempature': 7.9,
+        'time': 'Sun Apr 04 2021'
+      },
+      {
+        'forecast': 'Overcast clouds',
+        'tempature': 7.5,
+        'time': 'Mon Apr 05 2021'
+      },
+      {
+        'forecast': 'Overcast clouds',
+        'tempature': 6.8,
+        'time': 'Tue Apr 06 2021'
+      }
+    ];
+    
+    const data = await fakeRequest(app)
+      .get('/weather/16Days?city=salem&state=or')
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    expect(data.body).toEqual(expectation);
   });
 });
