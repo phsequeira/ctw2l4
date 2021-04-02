@@ -31,7 +31,7 @@ nowButton.addEventListener('click', () => {
         nDiv.className = 'Div';
         nowTime.textContent = item.time;
         nowForecast.textContent = 'Forecast: ' + item.forecast;
-        nowTemp.textContent = 'Average Temp: ' + item.tempature;
+        nowTemp.textContent = 'Current Temp: ' + item.tempature;
 
         nDiv.append(nowTime, nowForecast, nowTemp);
         nowDiv.append(nDiv);
